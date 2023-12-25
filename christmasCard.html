@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <link rel="stylesheet" href="christmas/css/card.css" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <title>Merry christmas 🎄</title>
+    <meta property="og:title" content="Merry christmas 🎄" />
+    <meta property="og:description" content="Merry christmas 🎄" />
+    <meta
+      property="og:image"
+      content="https://christmascardfromjinyi.netlify.app/image.png"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.6.3.min.js"
+      integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body onload="init()" onresize="init()">
+    <div class="wrapper">
+      <div
+        id="card"
+        class="card paper"
+        onmousemove="handleMouseMove()"
+        onmouseleave="reset()"
+        ontouchend="reset()"
+      >
+        <div
+          id="card__wrapper"
+          class="card__wrapper"
+          style="transform: rotateX(-10deg) rotateY(0deg)"
+        >
+          <div id="card__top" class="card__top">
+            <img
+              class="card__top__img__bg"
+              src="https://files.vingle.network/processed?key=files/G0CUWIRCRG/FI1SIFOQP/backgroundimage.jpg&type=ratio&value=3:2&scale=md"
+              alt="배경 이미지"
+            />
+          </div>
+          <img
+            class="card__top__img__1"
+            src="https://files.vingle.network/processed?key=files/G0CUWIRCRG/FZRXYQ25R/trees-1.png&type=ratio&value=16:9&scale=md"
+            alt="trees"
+          />
+          <img
+            class="card__top__img__2"
+            src="https://files.vingle.network/processed?key=files/G0CUWIRCRG/FTONWE46T/trees-2.png&type=ratio&value=16:9&scale=md"
+            alt="trees2"
+          />
+          <img
+            class="card__top__img__3"
+            src="https://files.vingle.network/processed?key=files/G0CUWIRCRG/FQ8C82DEW/santa.png&type=ratio&value=16:9&scale=md"
+            alt="santa"
+          />
+          <img
+            class="card__top__img__4"
+            src="https://files.vingle.network/files/G0CUWIRCRG/FIJCQ53PT/gifts.png"
+            alt="gifts"
+          />
+          <div id="card__bottom" class="card__bottom">
+            <p class="card__bottomTxt">
+              <b id="message_who">Merry christmas 🎄</b><br />
+              <span
+                id="message"
+                style="
+                  display: inline-block;
+                  font-size: 22px;
+                  padding-top: 26px;
+                "
+              >
+                Wishing you the happiest holidays <br />
+                and a wonderful New Year in 2023!
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="description">마우스를 박스 안에서 움직여보세요!</div>
+    </div>
+    <div class="mobile">데스크탑으로 확인해주세요!</div>
+
+    <script>
+      let $cardWrapper;
+      let $cardTop, $cardBottom;
+      let centerY, centerX;
+
+      function getQueryParameter(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+      }
+
+      function updateTextContent(id, text) {
+        const element = document.getElementById(id);
+
+        if (element && text) {
+          // '__br__' 문자열을 '<br />'로 변환
+          const updatedText = text.replace(/__br__/g, '<br />');
+          element.innerHTML = updatedText; // innerHTML을 사용하여 HTML 태그를 올바르게 렌더링
+        }
+      }
+
+      function init() {
+        $card = document.getElementById("card");
+        $cardWrapper = document.getElementById("card__wrapper");
+        $cardTop = document.getElementById("card__top");
+        $cardBottom = document.getElementById("card__bottom");
+
+        // 중앙 좌표값
+        centerY = $cardTop.getBoundingClientRect().bottom;
+        centerX =
+          $cardTop.getBoundingClientRect().left +
+          ($cardTop.getBoundingClientRect().right -
+            $cardTop.getBoundingClientRect().left) /
+            2;
+
+        const whoText = getQueryParameter('who');
+        const messageText = getQueryParameter('message');
+
+        updateTextContent('message_who', whoText);
+        updateTextContent('message', messageText);
+      }
+
+      function reset() {
+        $cardWrapper.style = "transform: rotateX(-10deg) rotateY(0deg);";
+      }
+
+      function handleMouseMove(event) {
+        let eventDoc, doc, body;
+
+        event = event || window.event;
+
+        // 마우스 좌표
+        // touch event 분기처리
+        let pageX = event.pageX ?? event.changedTouches[0].pageX;
+        let pageY = event.pageY ?? event.changedTouches[0].pageY;
+
+        let rotateX, rotateY;
+
+        // rotateX
+        if (pageX <= centerX) {
+          // 중앙 좌표값보다 작을 때
+          rotateX = (centerX - pageX) * 0.4;
+          rotateX > 80 ? (rotateX = 80) : (rotateX = rotateX);
+        } else {
+          // 중앙 좌표값보다 클 때
+          rotateX = (centerX - pageX) * 0.4;
+          rotateX < -80 ? (rotateX = -80) : (rotateX = rotateX);
+        }
+
+        // rotateY
+        if (pageY <= centerY) {
+          // 중앙 좌표값보다 작을 때
+          rotateY = (centerY - pageY) * 0.3;
+          rotateY > 20 ? (rotateY = 20) : (rotateY = rotateY);
+        } else {
+          // 중앙 좌표값보다 클 때
+          rotateY = (centerY - pageY) * 0.3;
+          rotateY < -40 ? (rotateY = -40) : (rotateY = rotateY);
+        }
+
+        $cardWrapper.style =
+          "transform: rotateX(" + rotateY + "deg) rotateY(" + rotateX + "deg);";
+      }
+    </script>
+  </body>
+</html>
